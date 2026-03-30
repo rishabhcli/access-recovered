@@ -14,6 +14,7 @@ import RehearsalBoardPage from "./pages/app/RehearsalBoardPage";
 import RunDetailPage from "./pages/app/RunDetailPage";
 import SettingsPage from "./pages/app/SettingsPage";
 import PublicReplayPage from "./pages/public/PublicReplayPage";
+import PublicRunReplayPage from "./pages/public/PublicRunReplayPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
