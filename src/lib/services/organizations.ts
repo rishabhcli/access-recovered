@@ -1,5 +1,4 @@
 import { supabase } from '@/lib/supabase/client';
-import type { Json } from '@/integrations/supabase/types';
 
 export interface OrgMembership {
   organization_id: string;
@@ -21,15 +20,40 @@ export async function fetchUserOrgs(): Promise<OrgMembership[]> {
   }));
 }
 
-export async function fetchOrgMembers(orgId: string) {
+export interface OrgMember {
+  id: string;
+  user_id: string;
+  role: string;
+  created_at: string;
+  profile: { full_name: string | null; avatar_url: string | null } | null;
+}
+
+export async function fetchOrgMembers(orgId: string): Promise<OrgMember[]> {
   const { data, error } = await supabase
     .from('user_roles')
-    .select('id, user_id, role, created_at, profiles(full_name, avatar_url)')
+    .select('id, user_id, role, created_at')
     .eq('organization_id', orgId)
     .order('created_at', { ascending: true });
 
   if (error) throw error;
-  return data ?? [];
+  if (!data || data.length === 0) return [];
+
+  // Fetch profiles separately since there's no direct FK from user_roles to profiles
+  const userIds = data.map(d => d.user_id);
+  const { data: profiles } = await supabase
+    .from('profiles')
+    .select('id, full_name, avatar_url')
+    .in('id', userIds);
+
+  const profileMap = new Map((profiles ?? []).map(p => [p.id, p]));
+
+  return data.map(d => ({
+    id: d.id,
+    user_id: d.user_id,
+    role: d.role as string,
+    created_at: d.created_at,
+    profile: profileMap.get(d.user_id) ?? null,
+  }));
 }
 
 export async function fetchOrgInvitations(orgId: string) {
@@ -53,7 +77,7 @@ export async function createInvitation(orgId: string, email: string, role: 'admi
     .insert({
       organization_id: orgId,
       email,
-      role: role as unknown as string,
+      role,
       invited_by: user.id,
     });
 
@@ -72,7 +96,7 @@ export async function deleteInvitation(invitationId: string) {
 export async function updateMemberRole(roleId: string, newRole: 'admin' | 'planner' | 'viewer') {
   const { error } = await supabase
     .from('user_roles')
-    .update({ role: newRole as unknown as string })
+    .update({ role: newRole })
     .eq('id', roleId);
 
   if (error) throw error;
