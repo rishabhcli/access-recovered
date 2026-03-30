@@ -42,6 +42,7 @@ export default function WorkspaceHomePage() {
             <Settings className="w-4 h-4" />
           </Link>
           <div className="w-px h-4 bg-border" />
+          <ThemeToggle />
           <button onClick={() => signOut()} className="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1">
             Sign Out
           </button>
