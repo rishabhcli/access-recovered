@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase/client';
 import { AccessMetrics, RunResult } from '@/lib/simulation/types';
 import type { Json } from '@/integrations/supabase/types';
+import { logAudit } from '@/lib/services/audit';
 
 export interface SaveRunParams {
   districtSlug: string;
@@ -74,6 +75,15 @@ export async function saveRun(params: SaveRunParams) {
   ];
 
   await supabase.from('scenario_run_events').insert(events);
+
+  // Audit log
+  logAudit({
+    action: 'run.saved',
+    entity_type: 'scenario_run',
+    entity_id: run!.id,
+    organization_id: params.organizationId,
+    payload: { title, interventionSlug: params.interventionSlug },
+  });
 
   return run!.id;
 }

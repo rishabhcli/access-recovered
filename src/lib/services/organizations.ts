@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase/client';
+import { logAudit } from '@/lib/services/audit';
 
 export interface OrgMembership {
   organization_id: string;
@@ -82,6 +83,7 @@ export async function createInvitation(orgId: string, email: string, role: 'admi
     });
 
   if (error) throw error;
+  logAudit({ action: 'invitation.sent', entity_type: 'invitation', organization_id: orgId, payload: { email, role } });
 }
 
 export async function deleteInvitation(invitationId: string) {
@@ -100,6 +102,7 @@ export async function updateMemberRole(roleId: string, newRole: 'admin' | 'plann
     .eq('id', roleId);
 
   if (error) throw error;
+  logAudit({ action: 'member.role_changed', entity_type: 'user_role', entity_id: roleId, payload: { newRole } });
 }
 
 export async function removeMember(roleId: string) {
@@ -109,6 +112,7 @@ export async function removeMember(roleId: string) {
     .eq('id', roleId);
 
   if (error) throw error;
+  logAudit({ action: 'member.removed', entity_type: 'user_role', entity_id: roleId });
 }
 
 export async function acceptPendingInvitations() {
