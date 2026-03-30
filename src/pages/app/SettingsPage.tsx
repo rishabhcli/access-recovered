@@ -12,6 +12,7 @@ import {
 import { fetchAuditLogs } from '@/lib/services/audit';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
+import { OnboardingTutorial } from '@/components/onboarding/OnboardingTutorial';
 
 function formatAction(action: string) {
   return action.replace(/\./g, ' · ').replace(/_/g, ' ');
