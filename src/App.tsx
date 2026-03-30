@@ -14,6 +14,7 @@ import RehearsalBoardPage from "./pages/app/RehearsalBoardPage";
 import RunDetailPage from "./pages/app/RunDetailPage";
 import SettingsPage from "./pages/app/SettingsPage";
 import PublicReplayPage from "./pages/public/PublicReplayPage";
+import PublicRunReplayPage from "./pages/public/PublicRunReplayPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
               <Route path="/app/runs/:runId" element={<ProtectedRoute><RunDetailPage /></ProtectedRoute>} />
               <Route path="/app/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
               <Route path="/replay/bridge-reconnect" element={<PublicReplayPage />} />
+              <Route path="/replay/:runId" element={<PublicRunReplayPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
