@@ -101,6 +101,9 @@ export default function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      {showTutorial && (
+        <OnboardingTutorial onComplete={closeTutorial} onDismiss={closeTutorial} />
+      )}
       <div className="border-b border-border bg-card/60 backdrop-blur-sm px-6 py-3 flex items-center gap-4 sticky top-0 z-30">
         <Link to="/app" className="text-muted-foreground hover:text-foreground transition-colors">
           <ArrowLeft className="w-4 h-4" />
