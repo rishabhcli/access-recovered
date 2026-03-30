@@ -24,6 +24,17 @@ export default function SettingsPage() {
   const queryClient = useQueryClient();
   const isAdmin = currentRole === 'admin';
   const orgId = currentOrg?.organization_id;
+  const [showTutorial, setShowTutorial] = useState(false);
+
+  const replayTutorial = useCallback(() => {
+    localStorage.removeItem('lifeline-onboarding-completed');
+    setShowTutorial(true);
+  }, []);
+
+  const closeTutorial = useCallback(() => {
+    localStorage.setItem('lifeline-onboarding-completed', 'true');
+    setShowTutorial(false);
+  }, []);
 
   const { data: members } = useQuery({
     queryKey: ['org-members', orgId],
