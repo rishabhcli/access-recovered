@@ -127,8 +127,15 @@ export default function SettingsPage() {
           </div>
           <div className="rounded border border-border bg-card/50 p-5">
             <div className="font-display text-base">{currentOrg?.organization.name ?? 'No organization'}</div>
-            <div className="text-xs text-muted-foreground/60 mt-1">
-              Your role: <span className="capitalize font-medium text-foreground/70">{currentRole}</span>
+            <div className="text-xs text-muted-foreground/60 mt-1 flex items-center justify-between">
+              <span>Your role: <span className="capitalize font-medium text-foreground/70">{currentRole}</span></span>
+              <button
+                onClick={replayTutorial}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-mono rounded border border-border bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80 transition-colors"
+              >
+                <RotateCcw className="w-3 h-3" />
+                Replay Tutorial
+              </button>
             </div>
           </div>
         </section>
