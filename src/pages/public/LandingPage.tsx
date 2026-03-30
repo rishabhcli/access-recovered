@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Layers, Shield, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { ThemeToggle } from '@/components/shell/ThemeToggle';
 
 export default function LandingPage() {
   return (
