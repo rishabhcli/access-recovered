@@ -44,19 +44,19 @@ export async function saveRun(params: SaveRunParams) {
       scenario_id: scenario?.id ?? null,
       created_by: user.id,
       title,
-      status: 'resolved',
-      baseline_metrics_json: params.baselineMetrics as unknown as Record<string, unknown>,
-      flooded_metrics_json: params.floodedMetrics as unknown as Record<string, unknown>,
-      resolved_metrics_json: params.resolvedMetrics as unknown as Record<string, unknown>,
+      status: 'resolved' as const,
+      baseline_metrics_json: params.baselineMetrics as unknown as Json,
+      flooded_metrics_json: params.floodedMetrics as unknown as Json,
+      resolved_metrics_json: params.resolvedMetrics as unknown as Json,
       selected_intervention_slug: params.interventionSlug,
       selected_anchor_id: params.anchorId,
       result_summary_json: {
         narrative: params.result.narrative,
         householdsRestored: params.result.householdsRestored,
         clustersReconnected: params.result.clustersReconnected,
-      } as unknown as Record<string, unknown>,
-      board_snapshot_before_json: params.floodedEdgesSnapshot as unknown as Record<string, unknown>,
-      board_snapshot_after_json: params.resolvedEdgesSnapshot as unknown as Record<string, unknown>,
+      } as unknown as Json,
+      board_snapshot_before_json: params.floodedEdgesSnapshot as unknown as Json,
+      board_snapshot_after_json: params.resolvedEdgesSnapshot as unknown as Json,
     })
     .select('id')
     .single();
