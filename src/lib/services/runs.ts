@@ -65,10 +65,10 @@ export async function saveRun(params: SaveRunParams) {
 
   // Create replay events
   const events = [
-    { run_id: run!.id, event_type: 'baseline', payload_json: { phase: 'baseline' } as unknown as Record<string, unknown>, created_by: user.id },
-    { run_id: run!.id, event_type: 'flooded', payload_json: { phase: 'flooded', scenarioSlug: params.scenarioSlug } as unknown as Record<string, unknown>, created_by: user.id },
-    { run_id: run!.id, event_type: 'intervention_applied', payload_json: { phase: 'resolved', interventionSlug: params.interventionSlug, anchorId: params.anchorId } as unknown as Record<string, unknown>, created_by: user.id },
-    { run_id: run!.id, event_type: 'resolved', payload_json: { phase: 'resolved', narrative: params.result.narrative } as unknown as Record<string, unknown>, created_by: user.id },
+    { run_id: run!.id, event_type: 'baseline', payload_json: { phase: 'baseline' } as Json, created_by: user.id },
+    { run_id: run!.id, event_type: 'flooded', payload_json: { phase: 'flooded', scenarioSlug: params.scenarioSlug } as Json, created_by: user.id },
+    { run_id: run!.id, event_type: 'intervention_applied', payload_json: { phase: 'resolved', interventionSlug: params.interventionSlug, anchorId: params.anchorId } as Json, created_by: user.id },
+    { run_id: run!.id, event_type: 'resolved', payload_json: { phase: 'resolved', narrative: params.result.narrative } as Json, created_by: user.id },
   ];
 
   await supabase.from('scenario_run_events').insert(events);
