@@ -7,9 +7,15 @@ import { useAuth } from '@/lib/supabase/auth-context';
 import {
   fetchOrgMembers, fetchOrgInvitations,
   createInvitation, deleteInvitation,
-  updateMemberRole, removeMember, updateProfile,
+  updateMemberRole, removeMember,
 } from '@/lib/services/organizations';
+import { fetchAuditLogs } from '@/lib/services/audit';
 import { toast } from 'sonner';
+import { motion } from 'framer-motion';
+
+function formatAction(action: string) {
+  return action.replace(/\./g, ' · ').replace(/_/g, ' ');
+}
 
 export default function SettingsPage() {
   const { currentOrg, currentRole, refetch: refetchOrg } = useOrg();
@@ -30,7 +36,12 @@ export default function SettingsPage() {
     enabled: !!orgId && isAdmin,
   });
 
-  // Invite form state
+  const { data: auditLogs } = useQuery({
+    queryKey: ['settings-audit', orgId],
+    queryFn: () => fetchAuditLogs(orgId!, 20),
+    enabled: !!orgId,
+  });
+
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState<'planner' | 'viewer'>('planner');
 
@@ -73,44 +84,68 @@ export default function SettingsPage() {
   const roleIcon = (role: string) => {
     if (role === 'admin') return <Shield className="w-3 h-3 text-primary" />;
     if (role === 'planner') return <PenLine className="w-3 h-3 text-status-restored" />;
-    return <Eye className="w-3 h-3 text-muted-foreground" />;
+    return <Eye className="w-3 h-3 text-muted-foreground/50" />;
   };
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="border-b border-border bg-card/80 px-6 py-3 flex items-center gap-4">
+      <div className="border-b border-border bg-card/60 backdrop-blur-sm px-6 py-3 flex items-center gap-4 sticky top-0 z-30">
         <Link to="/app" className="text-muted-foreground hover:text-foreground transition-colors">
           <ArrowLeft className="w-4 h-4" />
         </Link>
-        <span className="text-xs font-bold tracking-[0.2em] uppercase">Lifeline</span>
-        <span className="text-[10px] text-muted-foreground">Settings</span>
+        <div className="flex items-center gap-2">
+          <div className="w-5 h-5 rounded-sm bg-primary/20 flex items-center justify-center">
+            <div className="w-2 h-2 rounded-full bg-primary" />
+          </div>
+          <span className="font-display text-sm">Lifeline</span>
+        </div>
+        <div className="w-px h-4 bg-border" />
+        <span className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-wider">Settings</span>
       </div>
 
-      <div className="max-w-2xl mx-auto px-6 py-8 space-y-8">
+      <div className="max-w-2xl mx-auto px-6 py-10 space-y-10">
         {/* Organization */}
-        <div className="space-y-4">
-          <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-bold">Organization</div>
-          <div className="rounded-xl border border-border p-5">
-            <div className="text-sm font-semibold">{currentOrg?.organization.name ?? 'No organization'}</div>
-            <div className="text-xs text-muted-foreground mt-1">Your role: <span className="capitalize font-medium">{currentRole}</span></div>
+        <section>
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-wider">Organization</span>
+            <div className="h-px flex-1 bg-border/50" />
           </div>
-        </div>
+          <div className="rounded border border-border bg-card/50 p-5">
+            <div className="font-display text-base">{currentOrg?.organization.name ?? 'No organization'}</div>
+            <div className="text-xs text-muted-foreground/60 mt-1">
+              Your role: <span className="capitalize font-medium text-foreground/70">{currentRole}</span>
+            </div>
+          </div>
+        </section>
 
         {/* Members */}
-        <div className="space-y-4">
-          <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-bold">Members</div>
-          <div className="rounded-xl border border-border divide-y divide-border">
-            {members?.map(m => {
+        <section>
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-wider">Members</span>
+            <div className="h-px flex-1 bg-border/50" />
+            {members && <span className="text-[10px] font-mono text-muted-foreground/30">{members.length}</span>}
+          </div>
+          <div className="rounded border border-border divide-y divide-border/60">
+            {members?.map((m, i) => {
               const profile = m.profile;
               const isSelf = m.user_id === user?.id;
               return (
-                <div key={m.id} className="flex items-center justify-between px-5 py-3">
+                <motion.div
+                  key={m.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: i * 0.03 }}
+                  className="flex items-center justify-between px-5 py-3"
+                >
                   <div className="flex items-center gap-3">
-                    <div className="w-7 h-7 rounded-full bg-secondary flex items-center justify-center text-[10px] font-bold uppercase">
+                    <div className="w-7 h-7 rounded bg-secondary flex items-center justify-center text-[10px] font-mono font-medium uppercase text-muted-foreground">
                       {(profile?.full_name?.[0]) ?? '?'}
                     </div>
                     <div>
-                      <div className="text-sm font-medium">{profile?.full_name || 'Unknown'} {isSelf && <span className="text-muted-foreground">(you)</span>}</div>
+                      <div className="text-sm font-medium">
+                        {profile?.full_name || 'Unknown'}
+                        {isSelf && <span className="text-muted-foreground/40 ml-1 text-xs">(you)</span>}
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -119,39 +154,42 @@ export default function SettingsPage() {
                       <select
                         value={m.role as string}
                         onChange={e => roleUpdateMutation.mutate({ roleId: m.id, newRole: e.target.value as 'admin' | 'planner' | 'viewer' })}
-                        className="text-[10px] bg-secondary border border-border rounded px-1.5 py-0.5 capitalize"
+                        className="text-[10px] bg-secondary border border-border rounded px-1.5 py-0.5 capitalize font-mono"
                       >
                         <option value="admin">Admin</option>
                         <option value="planner">Planner</option>
                         <option value="viewer">Viewer</option>
                       </select>
                     ) : (
-                      <span className="text-[10px] text-muted-foreground capitalize">{m.role as string}</span>
+                      <span className="text-[10px] text-muted-foreground/50 capitalize font-mono">{m.role as string}</span>
                     )}
                     {isAdmin && !isSelf && (
                       <button onClick={() => removeMemberMutation.mutate(m.id)}
-                        className="text-muted-foreground hover:text-destructive transition-colors ml-1">
+                        className="text-muted-foreground/30 hover:text-destructive transition-colors ml-1">
                         <Trash2 className="w-3 h-3" />
                       </button>
                     )}
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>
-        </div>
+        </section>
 
-        {/* Invite (admin only) */}
+        {/* Invite */}
         {isAdmin && (
-          <div className="space-y-4">
-            <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-bold">Invite Member</div>
-            <div className="rounded-xl border border-border p-5 space-y-3">
+          <section>
+            <div className="flex items-center gap-3 mb-4">
+              <span className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-wider">Invite Member</span>
+              <div className="h-px flex-1 bg-border/50" />
+            </div>
+            <div className="rounded border border-border bg-card/50 p-5 space-y-3">
               <div className="flex gap-2">
                 <input type="email" value={inviteEmail} onChange={e => setInviteEmail(e.target.value)}
                   placeholder="colleague@city.gov"
-                  className="flex-1 px-3 py-2 rounded-lg bg-secondary border border-border text-sm placeholder:text-muted-foreground" />
+                  className="flex-1 px-3 py-2 rounded bg-secondary border border-border text-sm placeholder:text-muted-foreground/30 font-mono text-xs" />
                 <select value={inviteRole} onChange={e => setInviteRole(e.target.value as 'planner' | 'viewer')}
-                  className="px-2 py-2 rounded-lg bg-secondary border border-border text-xs">
+                  className="px-2 py-2 rounded bg-secondary border border-border text-xs font-mono">
                   <option value="planner">Planner</option>
                   <option value="viewer">Viewer</option>
                   <option value="admin">Admin</option>
@@ -159,25 +197,26 @@ export default function SettingsPage() {
               </div>
               <button onClick={() => inviteMutation.mutate()}
                 disabled={!inviteEmail || inviteMutation.isPending}
-                className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50">
+                className="flex items-center gap-1.5 px-4 py-2 text-xs font-medium rounded bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50">
                 <UserPlus className="w-3 h-3" />
                 {inviteMutation.isPending ? 'Sending…' : 'Send Invitation'}
               </button>
             </div>
 
-            {/* Pending invitations */}
             {invitations && invitations.length > 0 && (
-              <div className="space-y-2">
-                <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-bold">Pending Invitations</div>
-                <div className="rounded-xl border border-border divide-y divide-border">
+              <div className="mt-4 space-y-2">
+                <div className="text-[10px] font-mono text-muted-foreground/40 uppercase tracking-wider">Pending</div>
+                <div className="rounded border border-border divide-y divide-border/60">
                   {invitations.map(inv => (
                     <div key={inv.id} className="flex items-center justify-between px-5 py-3">
                       <div>
-                        <div className="text-sm">{inv.email}</div>
-                        <div className="text-[10px] text-muted-foreground capitalize">{inv.role} · Sent {new Date(inv.created_at).toLocaleDateString()}</div>
+                        <div className="text-sm font-mono">{inv.email}</div>
+                        <div className="text-[10px] text-muted-foreground/40 capitalize font-mono">
+                          {inv.role} · {new Date(inv.created_at).toLocaleDateString()}
+                        </div>
                       </div>
                       <button onClick={() => deleteInvMutation.mutate(inv.id)}
-                        className="text-muted-foreground hover:text-destructive transition-colors">
+                        className="text-muted-foreground/30 hover:text-destructive transition-colors">
                         <Trash2 className="w-3 h-3" />
                       </button>
                     </div>
@@ -185,8 +224,46 @@ export default function SettingsPage() {
                 </div>
               </div>
             )}
-          </div>
+          </section>
         )}
+
+        {/* Recent Audit */}
+        <section>
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-wider">Recent Activity</span>
+            <div className="h-px flex-1 bg-border/50" />
+            <Link to="/app/analytics" className="text-[10px] text-primary/60 hover:text-primary transition-colors font-mono">
+              View All →
+            </Link>
+          </div>
+          {(!auditLogs || auditLogs.length === 0) ? (
+            <div className="rounded border border-dashed border-border/60 p-6 text-center">
+              <p className="text-xs text-muted-foreground/40">No activity recorded yet.</p>
+            </div>
+          ) : (
+            <div className="space-y-0.5">
+              {auditLogs.map((log, i) => (
+                <motion.div
+                  key={log.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: i * 0.02 }}
+                  className="flex items-center gap-3 py-1.5 px-3 rounded hover:bg-card/30 transition-colors"
+                >
+                  <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                    log.action.startsWith('run') ? 'bg-primary/50'
+                    : log.action.startsWith('invitation') ? 'bg-accent/50'
+                    : 'bg-muted-foreground/20'
+                  }`} />
+                  <span className="text-xs text-foreground/60 capitalize flex-1 truncate">{formatAction(log.action)}</span>
+                  <span className="text-[9px] font-mono text-muted-foreground/25 shrink-0">
+                    {new Date(log.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </section>
       </div>
     </div>
   );
