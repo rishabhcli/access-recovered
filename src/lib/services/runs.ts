@@ -13,6 +13,7 @@ export interface SaveRunParams {
   result: RunResult;
   floodedEdgesSnapshot: unknown;
   resolvedEdgesSnapshot: unknown;
+  organizationId?: string;
 }
 
 export async function saveRun(params: SaveRunParams) {
@@ -43,6 +44,7 @@ export async function saveRun(params: SaveRunParams) {
       district_id: district.id,
       scenario_id: scenario?.id ?? null,
       created_by: user.id,
+      organization_id: params.organizationId ?? null,
       title,
       status: 'resolved' as const,
       baseline_metrics_json: params.baselineMetrics as unknown as Json,
@@ -98,13 +100,18 @@ export async function fetchRunEvents(runId: string) {
   return data;
 }
 
-export async function fetchRecentRuns() {
-  const { data, error } = await supabase
+export async function fetchRecentRuns(organizationId?: string) {
+  let query = supabase
     .from('scenario_runs')
-    .select('id, title, status, selected_intervention_slug, created_at, districts(slug, name)')
+    .select('id, title, status, selected_intervention_slug, created_at, created_by, organization_id, districts(slug, name)')
     .order('created_at', { ascending: false })
-    .limit(10);
+    .limit(20);
 
+  if (organizationId) {
+    query = query.eq('organization_id', organizationId);
+  }
+
+  const { data, error } = await query;
   if (error) throw error;
   return data ?? [];
 }

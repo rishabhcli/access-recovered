@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, RotateCcw, Save, Loader2 } from 'lucide-react';
 import { saveRun } from '@/lib/services/runs';
 import { useAuth } from '@/lib/supabase/auth-context';
+import { useOrg } from '@/lib/supabase/org-context';
 import { toast } from 'sonner';
 
 export default function RehearsalBoardPage() {
@@ -16,6 +17,7 @@ export default function RehearsalBoardPage() {
     scenario, armedIntervention, selectedAnchor, baselineMetrics, floodedMetrics,
     resolvedMetrics, result, edges, floodedEdges } = useSimulationStore();
   const { user } = useAuth();
+  const { currentOrg } = useOrg();
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
 
@@ -36,6 +38,7 @@ export default function RehearsalBoardPage() {
         result,
         floodedEdgesSnapshot: floodedEdges,
         resolvedEdgesSnapshot: edges,
+        organizationId: currentOrg?.organization_id,
       });
       toast.success('Run saved');
       navigate(`/app/runs/${runId}`);
