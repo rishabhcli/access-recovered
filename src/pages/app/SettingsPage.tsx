@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, UserPlus, Trash2, Shield, Eye, PenLine } from 'lucide-react';
+import { ArrowLeft, UserPlus, Trash2, Shield, Eye, PenLine, RotateCcw } from 'lucide-react';
 import { useOrg } from '@/lib/supabase/org-context';
 import { useAuth } from '@/lib/supabase/auth-context';
 import {
