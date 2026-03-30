@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { MapPin, ArrowRight, Clock, Zap, Settings, BarChart3, Activity } from 'lucide-react';
+import { ThemeToggle } from '@/components/shell/ThemeToggle';
 import { useQuery } from '@tanstack/react-query';
 import { fetchRecentRuns } from '@/lib/services/runs';
 import { useAuth } from '@/lib/supabase/auth-context';
