@@ -23,6 +23,9 @@ export default function WorkspaceHomePage() {
 
   return (
     <div className="min-h-screen bg-background">
+      {onboarding.show && (
+        <OnboardingTutorial onComplete={onboarding.complete} onDismiss={onboarding.dismiss} />
+      )}
       {/* Header */}
       <div className="border-b border-border bg-card/60 backdrop-blur-sm px-6 py-3.5 flex items-center justify-between sticky top-0 z-30">
         <div className="flex items-center gap-4">
