@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
-import { MapPin, ArrowRight, Clock, Zap } from 'lucide-react';
+import { MapPin, ArrowRight, Clock, Zap, Settings } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchRecentRuns } from '@/lib/services/runs';
 import { useAuth } from '@/lib/supabase/auth-context';
+import { OrgSwitcher } from '@/components/shell/OrgSwitcher';
 
 export default function WorkspaceHomePage() {
   const { signOut } = useAuth();
@@ -14,8 +15,16 @@ export default function WorkspaceHomePage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="border-b border-border bg-card/80 px-6 py-4 flex items-center justify-between">
-        <span className="text-xs font-bold tracking-[0.2em] uppercase">Lifeline</span>
-        <button onClick={() => signOut()} className="text-xs text-muted-foreground hover:text-foreground transition-colors">Sign Out</button>
+        <div className="flex items-center gap-4">
+          <span className="text-xs font-bold tracking-[0.2em] uppercase">Lifeline</span>
+          <OrgSwitcher />
+        </div>
+        <div className="flex items-center gap-3">
+          <Link to="/app/settings" className="text-muted-foreground hover:text-foreground transition-colors">
+            <Settings className="w-4 h-4" />
+          </Link>
+          <button onClick={() => signOut()} className="text-xs text-muted-foreground hover:text-foreground transition-colors">Sign Out</button>
+        </div>
       </div>
       <div className="max-w-3xl mx-auto px-6 py-12 space-y-8">
         <div>
