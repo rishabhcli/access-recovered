@@ -8,6 +8,7 @@ import { ProtectedRoute } from "@/components/feedback/ProtectedRoute";
 import LandingPage from "./pages/public/LandingPage";
 import AuthPage from "./pages/auth/AuthPage";
 import WorkspaceHomePage from "./pages/app/WorkspaceHomePage";
+import DistrictOverviewPage from "./pages/app/DistrictOverviewPage";
 import RehearsalBoardPage from "./pages/app/RehearsalBoardPage";
 import RunDetailPage from "./pages/app/RunDetailPage";
 import PublicReplayPage from "./pages/public/PublicReplayPage";
