@@ -111,9 +111,8 @@ export async function removeMember(roleId: string) {
     .eq('id', roleId);
 
   if (error) throw error;
+  logAudit({ action: 'member.removed', entity_type: 'user_role', entity_id: roleId });
 }
-
-export async function acceptPendingInvitations() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user?.email) return;
 
