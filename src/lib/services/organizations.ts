@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase/client';
+import { logAudit } from '@/lib/services/audit';
 
 export interface OrgMembership {
   organization_id: string;
