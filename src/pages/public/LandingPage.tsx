@@ -14,7 +14,6 @@ export default function LandingPage() {
           <span className="font-display text-lg">Lifeline</span>
         </div>
         <div className="flex items-center gap-4">
-          <ThemeToggle />
           <Link to="/replay/bridge-reconnect" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Demo</Link>
           <Link to="/auth" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Sign In</Link>
           <Link to="/app"
