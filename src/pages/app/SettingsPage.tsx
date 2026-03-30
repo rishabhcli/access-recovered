@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, UserPlus, Trash2, Shield, Eye, PenLine } from 'lucide-react';
+import { ArrowLeft, UserPlus, Trash2, Shield, Eye, PenLine, RotateCcw } from 'lucide-react';
 import { useOrg } from '@/lib/supabase/org-context';
 import { useAuth } from '@/lib/supabase/auth-context';
 import {
@@ -12,6 +12,7 @@ import {
 import { fetchAuditLogs } from '@/lib/services/audit';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
+import { OnboardingTutorial } from '@/components/onboarding/OnboardingTutorial';
 
 function formatAction(action: string) {
   return action.replace(/\./g, ' · ').replace(/_/g, ' ');
@@ -23,6 +24,17 @@ export default function SettingsPage() {
   const queryClient = useQueryClient();
   const isAdmin = currentRole === 'admin';
   const orgId = currentOrg?.organization_id;
+  const [showTutorial, setShowTutorial] = useState(false);
+
+  const replayTutorial = useCallback(() => {
+    localStorage.removeItem('lifeline-onboarding-completed');
+    setShowTutorial(true);
+  }, []);
+
+  const closeTutorial = useCallback(() => {
+    localStorage.setItem('lifeline-onboarding-completed', 'true');
+    setShowTutorial(false);
+  }, []);
 
   const { data: members } = useQuery({
     queryKey: ['org-members', orgId],
@@ -89,6 +101,9 @@ export default function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      {showTutorial && (
+        <OnboardingTutorial onComplete={closeTutorial} onDismiss={closeTutorial} />
+      )}
       <div className="border-b border-border bg-card/60 backdrop-blur-sm px-6 py-3 flex items-center gap-4 sticky top-0 z-30">
         <Link to="/app" className="text-muted-foreground hover:text-foreground transition-colors">
           <ArrowLeft className="w-4 h-4" />
@@ -112,8 +127,15 @@ export default function SettingsPage() {
           </div>
           <div className="rounded border border-border bg-card/50 p-5">
             <div className="font-display text-base">{currentOrg?.organization.name ?? 'No organization'}</div>
-            <div className="text-xs text-muted-foreground/60 mt-1">
-              Your role: <span className="capitalize font-medium text-foreground/70">{currentRole}</span>
+            <div className="text-xs text-muted-foreground/60 mt-1 flex items-center justify-between">
+              <span>Your role: <span className="capitalize font-medium text-foreground/70">{currentRole}</span></span>
+              <button
+                onClick={replayTutorial}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-mono rounded border border-border bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80 transition-colors"
+              >
+                <RotateCcw className="w-3 h-3" />
+                Replay Tutorial
+              </button>
             </div>
           </div>
         </section>
