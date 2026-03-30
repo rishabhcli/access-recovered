@@ -47,6 +47,7 @@ const App = () => (
         </TooltipProvider>
       </OrgProvider>
     </AuthProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 
