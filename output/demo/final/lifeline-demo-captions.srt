@@ -1,0 +1,143 @@
+1
+00:00:00,000 --> 00:00:06,000
+A flash flood cuts off two neighborhoods.
+
+2
+00:00:06,000 --> 00:00:12,000
+One temporary bridge brings 284 households back online.
+
+3
+00:00:12,000 --> 00:00:21,000
+Lifeline is a rehearsal tool for flood-access planning.
+
+4
+00:00:21,000 --> 00:00:30,000
+Instead of pretending to predict the future, it lets a municipal team test one intervention, watch the network change, and see who regains critical access to shelter and care first.
+
+5
+00:00:30,000 --> 00:00:39,285
+We start in Riverbend East.
+
+6
+00:00:39,285 --> 00:00:48,571
+The district is compact, but it has one fragile link: the east crossing.
+
+7
+00:00:48,571 --> 00:00:57,857
+As soon as the severe flash flood scenario is applied, access drops from six hundred and twelve households to three hundred and twenty eight.
+
+8
+00:00:57,857 --> 00:01:07,142
+Two east-side clusters lose reachable paths to both the shelter and the clinic.
+
+9
+00:01:07,142 --> 00:01:16,428
+And what I like here is that the app makes the failure legible fast.
+
+10
+00:01:16,428 --> 00:01:25,714
+You can click the isolated clusters, inspect the side panel, and see that this is not just a red map.
+
+11
+00:01:25,714 --> 00:01:35,000
+It is a concrete service-access problem.
+
+12
+00:01:35,000 --> 00:01:42,000
+Here’s the cool part.
+
+13
+00:01:42,000 --> 00:01:49,000
+Instead of making the team guess, Lifeline lets them arm a single deployable action and place it exactly where it matters.
+
+14
+00:01:49,000 --> 00:01:56,000
+In this case, a temporary bridge at East Crossing.
+
+15
+00:01:56,000 --> 00:02:03,000
+The board reruns immediately, the metric strip jumps back up, and both isolated clusters reconnect.
+
+16
+00:02:03,000 --> 00:02:10,000
+That is the payoff: one action, visible network recovery, and a quantified result.
+
+17
+00:02:10,000 --> 00:02:21,250
+And the app does not stop at a visual result.
+
+18
+00:02:21,250 --> 00:02:32,500
+The run can be saved immediately.
+
+19
+00:02:32,500 --> 00:02:43,750
+That lands on a detailed report with the board snapshot, baseline versus flooded versus resolved metrics, the generated narrative, editable notes, and exportable JSON.
+
+20
+00:02:43,750 --> 00:02:55,000
+So this becomes something a team can reference later, compare against other rehearsals, or hand to someone who never touched the board in the first place.
+
+21
+00:02:55,000 --> 00:03:05,000
+That saved run also turns into a public replay.
+
+22
+00:03:05,000 --> 00:03:15,000
+So the output can travel outside the workspace as a clean, read-only artifact.
+
+23
+00:03:15,000 --> 00:03:25,000
+The result stays understandable, the timeline stays visible, and nobody needs a planner account just to understand what happened.
+
+24
+00:03:25,000 --> 00:03:35,000
+For a hackathon demo, this is a big deal, because the proof does not disappear when the person driving the app stops talking.
+
+25
+00:03:35,000 --> 00:03:44,000
+Once a team has more than one rehearsal, the product starts to feel more operational.
+
+26
+00:03:44,000 --> 00:03:53,000
+Analytics shows run volume over time and which interventions are actually getting used.
+
+27
+00:03:53,000 --> 00:04:02,000
+Settings and the recent activity feed show that this is built for a team environment, not just a solo simulation toy.
+
+28
+00:04:02,000 --> 00:04:11,000
+In other words, the value compounds.
+
+29
+00:04:11,000 --> 00:04:20,000
+Every run adds context, every run is auditable, and the organization can start to build a playbook instead of one-off screenshots.
+
+30
+00:04:20,000 --> 00:04:25,000
+Under the hood, this is a deterministic network simulation.
+
+31
+00:04:25,000 --> 00:04:30,000
+A scenario changes edge states from normal to degraded or blocked.
+
+32
+00:04:30,000 --> 00:04:35,000
+An intervention adds or restores a path at a valid anchor.
+
+33
+00:04:35,000 --> 00:04:40,000
+Then the app recalculates access cluster by cluster against the shelter and clinic thresholds.
+
+34
+00:04:40,000 --> 00:04:45,000
+That is why the story feels credible.
+
+35
+00:04:45,000 --> 00:04:50,000
+The visuals are clean, but the numbers are grounded in an explicit model.
+
+36
+00:04:50,000 --> 00:05:05,000
+For a team planning under pressure, that means faster rehearsal, clearer tradeoffs, and a result they can actually share.

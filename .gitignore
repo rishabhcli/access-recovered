@@ -17,6 +17,11 @@ test-results
 playwright/.auth
 playwright/.tmp
 *.tsbuildinfo
+output/demo
+public/demo-assets
+tmp/demo
+.venv-video
+.venv312-video
 
 # Editor directories and files
 .vscode/*

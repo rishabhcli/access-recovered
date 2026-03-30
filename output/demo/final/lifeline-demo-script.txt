@@ -1,0 +1,17 @@
+01. A flash flood cuts off two neighborhoods. One temporary bridge brings 284 households back online.
+
+02. Lifeline is a rehearsal tool for flood-access planning. Instead of pretending to predict the future, it lets a municipal team test one intervention, watch the network change, and see who regains critical access to shelter and care first.
+
+03. We start in Riverbend East. The district is compact, but it has one fragile link: the east crossing. As soon as the severe flash flood scenario is applied, access drops from six hundred and twelve households to three hundred and twenty eight. Two east-side clusters lose reachable paths to both the shelter and the clinic. And what I like here is that the app makes the failure legible fast. You can click the isolated clusters, inspect the side panel, and see that this is not just a red map. It is a concrete service-access problem.
+
+04. Here’s the cool part. Instead of making the team guess, Lifeline lets them arm a single deployable action and place it exactly where it matters. In this case, a temporary bridge at East Crossing. The board reruns immediately, the metric strip jumps back up, and both isolated clusters reconnect. That is the payoff: one action, visible network recovery, and a quantified result.
+
+05. And the app does not stop at a visual result. The run can be saved immediately. That lands on a detailed report with the board snapshot, baseline versus flooded versus resolved metrics, the generated narrative, editable notes, and exportable JSON. So this becomes something a team can reference later, compare against other rehearsals, or hand to someone who never touched the board in the first place.
+
+06. That saved run also turns into a public replay. So the output can travel outside the workspace as a clean, read-only artifact. The result stays understandable, the timeline stays visible, and nobody needs a planner account just to understand what happened. For a hackathon demo, this is a big deal, because the proof does not disappear when the person driving the app stops talking.
+
+07. Once a team has more than one rehearsal, the product starts to feel more operational. Analytics shows run volume over time and which interventions are actually getting used. Settings and the recent activity feed show that this is built for a team environment, not just a solo simulation toy. In other words, the value compounds. Every run adds context, every run is auditable, and the organization can start to build a playbook instead of one-off screenshots.
+
+08. Under the hood, this is a deterministic network simulation. A scenario changes edge states from normal to degraded or blocked. An intervention adds or restores a path at a valid anchor. Then the app recalculates access cluster by cluster against the shelter and clinic thresholds. That is why the story feels credible. The visuals are clean, but the numbers are grounded in an explicit model.
+
+09. For a team planning under pressure, that means faster rehearsal, clearer tradeoffs, and a result they can actually share.
