@@ -6,11 +6,13 @@ import { useAuth } from '@/lib/supabase/auth-context';
 import { OrgSwitcher } from '@/components/shell/OrgSwitcher';
 import { useOrg } from '@/lib/supabase/org-context';
 import { LiveActivityBar } from '@/components/shell/LiveActivityBar';
+import { OnboardingTutorial, useOnboardingState } from '@/components/onboarding/OnboardingTutorial';
 import { motion } from 'framer-motion';
 
 export default function WorkspaceHomePage() {
   const { signOut } = useAuth();
   const { currentOrg } = useOrg();
+  const onboarding = useOnboardingState();
   const orgId = currentOrg?.organization_id;
 
   const { data: runs } = useQuery({
@@ -21,6 +23,9 @@ export default function WorkspaceHomePage() {
 
   return (
     <div className="min-h-screen bg-background">
+      {onboarding.show && (
+        <OnboardingTutorial onComplete={onboarding.complete} onDismiss={onboarding.dismiss} />
+      )}
       {/* Header */}
       <div className="border-b border-border bg-card/60 backdrop-blur-sm px-6 py-3.5 flex items-center justify-between sticky top-0 z-30">
         <div className="flex items-center gap-4">
