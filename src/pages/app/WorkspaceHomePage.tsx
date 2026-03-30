@@ -12,6 +12,7 @@ import { motion } from 'framer-motion';
 export default function WorkspaceHomePage() {
   const { signOut } = useAuth();
   const { currentOrg } = useOrg();
+  const onboarding = useOnboardingState();
   const orgId = currentOrg?.organization_id;
 
   const { data: runs } = useQuery({
