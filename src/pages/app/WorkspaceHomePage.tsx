@@ -22,7 +22,7 @@ export default function WorkspaceHomePage() {
           <h2 className="text-lg font-bold mb-1">Districts</h2>
           <p className="text-sm text-muted-foreground">Select a district to begin rehearsal.</p>
         </div>
-        <Link to="/app/rehearsal/riverbend-east" className="block group">
+        <Link to="/app/districts/riverbend-east" className="block group">
           <div className="rounded-xl border border-border bg-card p-6 hover:border-primary/40 transition-colors">
             <div className="flex items-start justify-between">
               <div className="space-y-2">
