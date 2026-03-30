@@ -101,7 +101,7 @@ export default function SettingsPage() {
           <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-bold">Members</div>
           <div className="rounded-xl border border-border divide-y divide-border">
             {members?.map(m => {
-              const profile = m.profiles as { full_name: string | null; avatar_url: string | null } | null;
+              const profile = m.profile;
               const isSelf = m.user_id === user?.id;
               return (
                 <div key={m.id} className="flex items-center justify-between px-5 py-3">
