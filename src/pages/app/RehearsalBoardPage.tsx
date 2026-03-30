@@ -59,6 +59,11 @@ export default function RehearsalBoardPage() {
           <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors"><ArrowLeft className="w-4 h-4" /></Link>
           <span className="text-xs font-bold tracking-[0.2em] uppercase">Lifeline</span>
           <span className="text-[10px] text-muted-foreground">Riverbend East</span>
+          <button onClick={() => setProvenanceOpen(true)}
+            className="flex items-center gap-1 px-2 py-1 text-[10px] text-muted-foreground hover:text-foreground rounded-md hover:bg-secondary transition-colors"
+            title="Data provenance">
+            <FileText className="w-3 h-3" /> Provenance
+          </button>
         </div>
         <div className="flex items-center gap-2">
           {phase === 'baseline' && SCENARIOS.map(s => (
