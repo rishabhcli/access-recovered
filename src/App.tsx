@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/lib/supabase/auth-context";
+import { ThemeProvider } from "@/components/shell/ThemeProvider";
 import { OrgProvider } from "@/lib/supabase/org-context";
 import { ProtectedRoute } from "@/components/feedback/ProtectedRoute";
 import LandingPage from "./pages/public/LandingPage";
