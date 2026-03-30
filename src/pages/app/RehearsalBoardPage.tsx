@@ -21,6 +21,7 @@ export default function RehearsalBoardPage() {
   const { currentOrg } = useOrg();
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
+  const [provenanceOpen, setProvenanceOpen] = useState(false);
 
   useEffect(() => { loadDistrict(); }, [loadDistrict]);
 
