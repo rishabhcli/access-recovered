@@ -51,7 +51,7 @@ export default function SettingsPage() {
   const { data: auditLogs } = useQuery({
     queryKey: ['settings-audit', orgId],
     queryFn: () => fetchAuditLogs(orgId!, 20),
-    enabled: !!orgId,
+    enabled: !!orgId && isAdmin,
   });
 
   const [inviteEmail, setInviteEmail] = useState('');
@@ -63,6 +63,7 @@ export default function SettingsPage() {
       toast.success(`Invitation sent to ${inviteEmail}`);
       setInviteEmail('');
       queryClient.invalidateQueries({ queryKey: ['org-invitations', orgId] });
+      queryClient.invalidateQueries({ queryKey: ['settings-audit', orgId] });
     },
     onError: (err: Error) => toast.error(err.message),
   });
@@ -81,6 +82,7 @@ export default function SettingsPage() {
     onSuccess: () => {
       toast.success('Role updated');
       queryClient.invalidateQueries({ queryKey: ['org-members', orgId] });
+      queryClient.invalidateQueries({ queryKey: ['settings-audit', orgId] });
       refetchOrg();
     },
   });
@@ -90,6 +92,7 @@ export default function SettingsPage() {
     onSuccess: () => {
       toast.success('Member removed');
       queryClient.invalidateQueries({ queryKey: ['org-members', orgId] });
+      queryClient.invalidateQueries({ queryKey: ['settings-audit', orgId] });
     },
   });
 
@@ -176,6 +179,7 @@ export default function SettingsPage() {
                       <select
                         value={m.role as string}
                         onChange={e => roleUpdateMutation.mutate({ roleId: m.id, newRole: e.target.value as 'admin' | 'planner' | 'viewer' })}
+                        aria-label={`Role for ${profile?.full_name || 'member'}`}
                         className="text-[10px] bg-secondary border border-border rounded px-1.5 py-0.5 capitalize font-mono"
                       >
                         <option value="admin">Admin</option>
@@ -187,6 +191,7 @@ export default function SettingsPage() {
                     )}
                     {isAdmin && !isSelf && (
                       <button onClick={() => removeMemberMutation.mutate(m.id)}
+                        aria-label={`Remove ${profile?.full_name || 'member'}`}
                         className="text-muted-foreground/30 hover:text-destructive transition-colors ml-1">
                         <Trash2 className="w-3 h-3" />
                       </button>
@@ -208,9 +213,11 @@ export default function SettingsPage() {
             <div className="rounded border border-border bg-card/50 p-5 space-y-3">
               <div className="flex gap-2">
                 <input type="email" value={inviteEmail} onChange={e => setInviteEmail(e.target.value)}
+                  aria-label="Invite email"
                   placeholder="colleague@city.gov"
                   className="flex-1 px-3 py-2 rounded bg-secondary border border-border text-sm placeholder:text-muted-foreground/30 font-mono text-xs" />
                 <select value={inviteRole} onChange={e => setInviteRole(e.target.value as 'planner' | 'viewer')}
+                  aria-label="Invite role"
                   className="px-2 py-2 rounded bg-secondary border border-border text-xs font-mono">
                   <option value="planner">Planner</option>
                   <option value="viewer">Viewer</option>
@@ -238,6 +245,7 @@ export default function SettingsPage() {
                         </div>
                       </div>
                       <button onClick={() => deleteInvMutation.mutate(inv.id)}
+                        aria-label={`Cancel invitation for ${inv.email}`}
                         className="text-muted-foreground/30 hover:text-destructive transition-colors">
                         <Trash2 className="w-3 h-3" />
                       </button>
@@ -258,7 +266,11 @@ export default function SettingsPage() {
               View All →
             </Link>
           </div>
-          {(!auditLogs || auditLogs.length === 0) ? (
+          {!isAdmin ? (
+            <div className="rounded border border-dashed border-border/60 p-6 text-center">
+              <p className="text-xs text-muted-foreground/40">Recent activity is visible to organization admins only.</p>
+            </div>
+          ) : (!auditLogs || auditLogs.length === 0) ? (
             <div className="rounded border border-dashed border-border/60 p-6 text-center">
               <p className="text-xs text-muted-foreground/40">No activity recorded yet.</p>
             </div>

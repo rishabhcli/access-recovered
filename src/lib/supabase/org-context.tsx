@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState, ReactNode } from 'react';
 import { useAuth } from '@/lib/supabase/auth-context';
 import { fetchUserOrgs, fetchProfile, acceptPendingInvitations, type OrgMembership } from '@/lib/services/organizations';
 
@@ -18,9 +18,10 @@ export function OrgProvider({ children }: { children: ReactNode }) {
   const [memberships, setMemberships] = useState<OrgMembership[]>([]);
   const [currentOrgId, setCurrentOrgId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const userId = user?.id;
 
-  const load = async () => {
-    if (!user) { setMemberships([]); setCurrentOrgId(null); setLoading(false); return; }
+  const load = useCallback(async () => {
+    if (!userId) { setMemberships([]); setCurrentOrgId(null); setLoading(false); return; }
     try {
       await acceptPendingInvitations();
       const [orgs, profile] = await Promise.all([fetchUserOrgs(), fetchProfile()]);
@@ -36,9 +37,11 @@ export function OrgProvider({ children }: { children: ReactNode }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
 
-  useEffect(() => { load(); }, [user?.id]);
+  useEffect(() => {
+    void load();
+  }, [load]);
 
   const currentOrg = memberships.find(m => m.organization_id === currentOrgId) ?? null;
 

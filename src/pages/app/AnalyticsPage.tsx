@@ -14,8 +14,9 @@ function formatAction(action: string) {
 }
 
 export default function AnalyticsPage() {
-  const { currentOrg } = useOrg();
+  const { currentOrg, currentRole } = useOrg();
   const orgId = currentOrg?.organization_id;
+  const isAdmin = currentRole === 'admin';
 
   const { data: runs } = useQuery({
     queryKey: ['analytics-runs', orgId],
@@ -26,7 +27,7 @@ export default function AnalyticsPage() {
   const { data: auditLogs } = useQuery({
     queryKey: ['audit-logs', orgId],
     queryFn: () => fetchAuditLogs(orgId!),
-    enabled: !!orgId,
+    enabled: !!orgId && isAdmin,
   });
 
   // Compute intervention usage
@@ -165,7 +166,11 @@ export default function AnalyticsPage() {
             <span className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-wider">Audit Feed</span>
             <div className="h-px flex-1 bg-border/50" />
           </div>
-          {(!auditLogs || auditLogs.length === 0) ? (
+          {!isAdmin ? (
+            <div className="rounded border border-dashed border-border/60 p-8 text-center">
+              <p className="text-sm text-muted-foreground/50">Audit events are visible to organization admins only.</p>
+            </div>
+          ) : (!auditLogs || auditLogs.length === 0) ? (
             <div className="rounded border border-dashed border-border/60 p-8 text-center">
               <p className="text-sm text-muted-foreground/50">No audit events recorded yet.</p>
             </div>

@@ -359,7 +359,9 @@ export default function RunDetailPage() {
             <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-bold">Notes</div>
             {/* Screen: editable */}
             <div className="no-print">
+              <label htmlFor="run-notes" className="sr-only">Notes</label>
               <textarea
+                id="run-notes"
                 value={notes}
                 onChange={e => setNotes(e.target.value)}
                 placeholder="Add operational notes, assumptions, or considerations…"

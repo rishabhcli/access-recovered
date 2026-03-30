@@ -18,6 +18,8 @@ export function OrgSwitcher() {
   return (
     <div className="relative">
       <button onClick={() => setOpen(!open)}
+        aria-label="Switch organization"
+        data-testid="org-switcher-trigger"
         className="flex items-center gap-1.5 px-2 py-1 rounded text-xs text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors">
         <Building2 className="w-3 h-3" />
         <span className="truncate max-w-[140px] font-medium">{currentOrg?.organization.name ?? 'Select'}</span>
@@ -30,6 +32,8 @@ export function OrgSwitcher() {
             {memberships.map(m => (
               <button key={m.organization_id}
                 onClick={() => { switchOrg(m.organization_id); setOpen(false); }}
+                aria-label={`Switch to ${m.organization.name}`}
+                data-testid={`org-switcher-option-${m.organization.slug}`}
                 className="w-full flex items-center justify-between px-3 py-2 text-xs hover:bg-secondary/50 transition-colors">
                 <div className="flex items-center gap-2 truncate">
                   <Building2 className="w-3 h-3 shrink-0 text-muted-foreground/50" />

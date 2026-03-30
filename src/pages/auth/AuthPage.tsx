@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/lib/supabase/auth-context';
@@ -13,10 +13,13 @@ export default function AuthPage() {
   const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
 
-  if (user) {
-    navigate('/app', { replace: true });
-    return null;
-  }
+  useEffect(() => {
+    if (user) {
+      navigate('/app', { replace: true });
+    }
+  }, [navigate, user]);
+
+  if (user) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,21 +54,21 @@ export default function AuthPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {isSignUp && (
             <div className="space-y-1.5">
-              <label className="text-xs font-medium">Full Name</label>
-              <input type="text" value={fullName} onChange={e => setFullName(e.target.value)}
+              <label htmlFor="full-name" className="text-xs font-medium">Full Name</label>
+              <input id="full-name" type="text" value={fullName} onChange={e => setFullName(e.target.value)}
                 placeholder="Jane Doe"
                 className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-sm placeholder:text-muted-foreground" />
             </div>
           )}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium">Email</label>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+            <label htmlFor="email" className="text-xs font-medium">Email</label>
+            <input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)}
               placeholder="planner@city.gov" required
               className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-sm placeholder:text-muted-foreground" />
           </div>
           <div className="space-y-1.5">
-            <label className="text-xs font-medium">Password</label>
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)}
+            <label htmlFor="password" className="text-xs font-medium">Password</label>
+            <input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)}
               placeholder="••••••••" required minLength={6}
               className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-sm placeholder:text-muted-foreground" />
           </div>

@@ -8,6 +8,13 @@ const EDGE_COLORS: Record<EdgeStatus, string> = {
 const EDGE_W: Record<EdgeStatus, number> = { normal: 2.5, degraded: 2, blocked: 1.5, restored: 2.5, temporary: 3 };
 const EDGE_DASH: Record<EdgeStatus, string> = { normal: '', degraded: '8 4', blocked: '4 4', restored: '', temporary: '10 5' };
 
+function handleSvgAction(event: React.KeyboardEvent<SVGGElement>, action: () => void) {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    action();
+  }
+}
+
 export function SimulationBoard() {
   const { nodes, edges, phase, scenario, baselineMetrics, floodedMetrics, resolvedMetrics,
     armedIntervention, selectedAnchor, selectedCluster, selectCluster, selectAnchor, executeIntervention,
@@ -21,7 +28,7 @@ export function SimulationBoard() {
   const anchors = nodes.filter(n => n.anchorKind);
 
   return (
-    <svg viewBox="0 0 1120 650" className="w-full h-full" style={{ background: 'hsl(220,25%,5%)' }}>
+    <svg viewBox="0 0 1120 650" className="w-full h-full" style={{ background: 'hsl(220,25%,5%)' }} aria-label="Simulation board">
       <defs>
         <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
           <path d="M 40 0 L 0 0 0 40" fill="none" stroke="hsl(220,15%,10%)" strokeWidth="0.5" />
@@ -79,8 +86,21 @@ export function SimulationBoard() {
         const isolated = acc && !acc.hasAccess;
         const sel = selectedCluster === c.id;
         const col = isolated ? 'hsl(0,70%,55%)' : 'hsl(185,60%,40%)';
+        const onSelect = () => selectCluster(sel ? null : c.id);
         return (
-          <g key={c.id} transform={`translate(${c.x},${c.y})`} onClick={() => selectCluster(sel ? null : c.id)} style={{ cursor: 'pointer' }}>
+          <g
+            key={c.id}
+            transform={`translate(${c.x},${c.y})`}
+            onClick={onSelect}
+            onKeyDown={(event) => handleSvgAction(event, onSelect)}
+            style={{ cursor: 'pointer' }}
+            role="button"
+            tabIndex={0}
+            focusable="true"
+            aria-pressed={sel}
+            aria-label={`${c.label ?? c.id}, ${c.households ?? 0} households, ${isolated ? 'isolated' : 'connected'}`}
+            data-testid={`board-cluster-${c.id}`}
+          >
             {sel && <rect x={-24} y={-24} width={48} height={48} rx={10} fill="none" stroke={col} strokeWidth={2} opacity={0.7} />}
             {isolated && <rect x={-20} y={-20} width={40} height={40} rx={8} fill={col} opacity={0.12}>
               <animate attributeName="opacity" values="0.08;0.18;0.08" dur="2s" repeatCount="indefinite" />
@@ -98,8 +118,21 @@ export function SimulationBoard() {
         const sel = selectedAnchor === a.id;
         if (phase !== 'armed' && !sel) return null;
         if (phase === 'armed' && !valid) return null;
+        const onSelect = () => selectAnchor(a.id);
         return (
-          <g key={a.id} transform={`translate(${a.x},${a.y})`} onClick={() => selectAnchor(a.id)} style={{ cursor: valid ? 'pointer' : 'default' }}>
+          <g
+            key={a.id}
+            transform={`translate(${a.x},${a.y})`}
+            onClick={onSelect}
+            onKeyDown={(event) => handleSvgAction(event, onSelect)}
+            style={{ cursor: valid ? 'pointer' : 'default' }}
+            role="button"
+            tabIndex={0}
+            focusable="true"
+            aria-pressed={sel}
+            aria-label={`Anchor ${a.label ?? a.id}${valid ? '' : ', unavailable'}`}
+            data-testid={`board-anchor-${a.id}`}
+          >
             {valid && !sel && (
               <circle r={20} fill="hsl(185,80%,55%)" opacity={0.15} filter="url(#pulseGlow)">
                 <animate attributeName="r" values="18;26;18" dur="2s" repeatCount="indefinite" />
@@ -115,7 +148,17 @@ export function SimulationBoard() {
 
       {/* Deploy button */}
       {phase === 'armed' && selectedAnchor && nodeMap[selectedAnchor] && (
-        <g transform={`translate(${nodeMap[selectedAnchor].x},${nodeMap[selectedAnchor].y + 42})`} onClick={executeIntervention} style={{ cursor: 'pointer' }}>
+        <g
+          transform={`translate(${nodeMap[selectedAnchor].x},${nodeMap[selectedAnchor].y + 42})`}
+          onClick={executeIntervention}
+          onKeyDown={(event) => handleSvgAction(event, executeIntervention)}
+          style={{ cursor: 'pointer' }}
+          role="button"
+          tabIndex={0}
+          focusable="true"
+          aria-label="Deploy intervention"
+          data-testid="board-deploy-intervention"
+        >
           <rect x={-44} y={-13} width={88} height={26} rx={6} fill="hsl(185,65%,42%)" />
           <text textAnchor="middle" y={4} fill="hsl(220,25%,5%)" fontSize={11} fontWeight={700} fontFamily="'Space Grotesk',system-ui">Deploy</text>
         </g>
