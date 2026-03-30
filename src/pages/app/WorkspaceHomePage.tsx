@@ -6,6 +6,7 @@ import { useAuth } from '@/lib/supabase/auth-context';
 import { OrgSwitcher } from '@/components/shell/OrgSwitcher';
 import { useOrg } from '@/lib/supabase/org-context';
 import { LiveActivityBar } from '@/components/shell/LiveActivityBar';
+import { OnboardingTutorial, useOnboardingState } from '@/components/onboarding/OnboardingTutorial';
 import { motion } from 'framer-motion';
 
 export default function WorkspaceHomePage() {
