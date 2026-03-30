@@ -108,6 +108,7 @@ export default function RehearsalBoardPage() {
       <div className="border-t border-border bg-card/80 shrink-0">
         <InterventionTray />
       </div>
+      <ProvenanceDrawer open={provenanceOpen} onClose={() => setProvenanceOpen(false)} />
     </div>
   );
 }
