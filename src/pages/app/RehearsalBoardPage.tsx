@@ -4,9 +4,10 @@ import { SimulationBoard } from '@/components/board/SimulationBoard';
 import { InterventionTray } from '@/components/controls/InterventionTray';
 import { MetricStrip } from '@/components/shell/MetricStrip';
 import { SidePanel } from '@/components/panels/SidePanel';
+import { ProvenanceDrawer } from '@/components/panels/ProvenanceDrawer';
 import { SCENARIOS } from '@/data/seed/riverbend-east';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, RotateCcw, Save, Loader2 } from 'lucide-react';
+import { ArrowLeft, RotateCcw, Save, Loader2, FileText } from 'lucide-react';
 import { saveRun } from '@/lib/services/runs';
 import { useAuth } from '@/lib/supabase/auth-context';
 import { useOrg } from '@/lib/supabase/org-context';
@@ -20,6 +21,7 @@ export default function RehearsalBoardPage() {
   const { currentOrg } = useOrg();
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
+  const [provenanceOpen, setProvenanceOpen] = useState(false);
 
   useEffect(() => { loadDistrict(); }, [loadDistrict]);
 
@@ -57,6 +59,11 @@ export default function RehearsalBoardPage() {
           <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors"><ArrowLeft className="w-4 h-4" /></Link>
           <span className="text-xs font-bold tracking-[0.2em] uppercase">Lifeline</span>
           <span className="text-[10px] text-muted-foreground">Riverbend East</span>
+          <button onClick={() => setProvenanceOpen(true)}
+            className="flex items-center gap-1 px-2 py-1 text-[10px] text-muted-foreground hover:text-foreground rounded-md hover:bg-secondary transition-colors"
+            title="Data provenance">
+            <FileText className="w-3 h-3" /> Provenance
+          </button>
         </div>
         <div className="flex items-center gap-2">
           {phase === 'baseline' && SCENARIOS.map(s => (
@@ -101,6 +108,7 @@ export default function RehearsalBoardPage() {
       <div className="border-t border-border bg-card/80 shrink-0">
         <InterventionTray />
       </div>
+      <ProvenanceDrawer open={provenanceOpen} onClose={() => setProvenanceOpen(false)} />
     </div>
   );
 }
