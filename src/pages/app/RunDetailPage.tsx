@@ -171,8 +171,8 @@ export default function RunDetailPage() {
   const result = run.result_summary_json as { narrative: string; householdsRestored: number; clustersReconnected: number } | null;
   const district = run.districts as { slug: string; name: string } | null;
   const scenario = run.scenarios as { slug: string; label: string; severity: string } | null;
-  const beforeEdges = run.board_snapshot_before_json as GraphEdge[] | null;
-  const afterEdges = run.board_snapshot_after_json as GraphEdge[] | null;
+  const beforeEdges = run.board_snapshot_before_json as unknown as GraphEdge[] | null;
+  const afterEdges = run.board_snapshot_after_json as unknown as GraphEdge[] | null;
 
   const interventionLabel = run.selected_intervention_slug === 'temporary-bridge' ? 'Temporary Bridge'
     : run.selected_intervention_slug === 'mobile-clinic' ? 'Mobile Clinic'
