@@ -101,6 +101,7 @@ export async function updateMemberRole(roleId: string, newRole: 'admin' | 'plann
     .eq('id', roleId);
 
   if (error) throw error;
+  logAudit({ action: 'member.role_changed', entity_type: 'user_role', entity_id: roleId, payload: { newRole } });
 }
 
 export async function removeMember(roleId: string) {
