@@ -12,8 +12,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["'Space Grotesk'", "system-ui", "sans-serif"],
-        mono: ["'JetBrains Mono'", "ui-monospace", "monospace"],
+        sans: ["'DM Sans'", "system-ui", "sans-serif"],
+        display: ["'DM Serif Display'", "Georgia", "serif"],
+        mono: ["'IBM Plex Mono'", "ui-monospace", "monospace"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -46,6 +47,11 @@ export default {
           degraded: "hsl(var(--status-degraded))",
           blocked: "hsl(var(--status-blocked))",
         },
+        topo: {
+          line: "hsl(var(--topo-line))",
+          contour: "hsl(var(--contour))",
+          elevation: "hsl(var(--elevation))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -55,10 +61,15 @@ export default {
       keyframes: {
         "accordion-down": { from: { height: "0" }, to: { height: "var(--radix-accordion-content-height)" } },
         "accordion-up": { from: { height: "var(--radix-accordion-content-height)" }, to: { height: "0" } },
+        "pulse-gentle": {
+          "0%, 100%": { opacity: "0.4" },
+          "50%": { opacity: "1" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "pulse-gentle": "pulse-gentle 2s ease-in-out infinite",
       },
     },
   },
