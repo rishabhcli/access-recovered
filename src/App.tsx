@@ -27,6 +27,7 @@ const App = () => (
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/app" element={<ProtectedRoute><WorkspaceHomePage /></ProtectedRoute>} />
+            <Route path="/app/districts/:districtSlug" element={<ProtectedRoute><DistrictOverviewPage /></ProtectedRoute>} />
             <Route path="/app/rehearsal/:districtSlug" element={<ProtectedRoute><RehearsalBoardPage /></ProtectedRoute>} />
             <Route path="/app/runs/:runId" element={<ProtectedRoute><RunDetailPage /></ProtectedRoute>} />
             <Route path="/replay/bridge-reconnect" element={<PublicReplayPage />} />
