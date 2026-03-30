@@ -4,14 +4,18 @@ import { ArrowLeft, MapPin, Shield, Heart, Zap, Clock, ArrowRight, Play } from '
 import { motion } from 'framer-motion';
 import { fetchRecentRuns } from '@/lib/services/runs';
 import { RIVERBEND_EAST, SCENARIOS, INTERVENTION_TYPES } from '@/data/seed/riverbend-east';
+import { useOrg } from '@/lib/supabase/org-context';
 
 export default function DistrictOverviewPage() {
   const { districtSlug } = useParams<{ districtSlug: string }>();
   const district = RIVERBEND_EAST;
+  const { currentOrg } = useOrg();
+  const orgId = currentOrg?.organization_id;
 
   const { data: runs } = useQuery({
-    queryKey: ['recent-runs'],
-    queryFn: fetchRecentRuns,
+    queryKey: ['recent-runs', orgId],
+    queryFn: () => fetchRecentRuns(orgId ?? undefined),
+    enabled: !!orgId,
   });
 
   const districtRuns = runs?.filter(r => (r.districts as { slug: string } | null)?.slug === districtSlug) ?? [];

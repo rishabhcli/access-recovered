@@ -17,6 +17,7 @@ export default function RehearsalBoardPage() {
     scenario, armedIntervention, selectedAnchor, baselineMetrics, floodedMetrics,
     resolvedMetrics, result, edges, floodedEdges } = useSimulationStore();
   const { user } = useAuth();
+  const { currentOrg } = useOrg();
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
 

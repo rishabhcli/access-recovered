@@ -4,12 +4,17 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchRecentRuns } from '@/lib/services/runs';
 import { useAuth } from '@/lib/supabase/auth-context';
 import { OrgSwitcher } from '@/components/shell/OrgSwitcher';
+import { useOrg } from '@/lib/supabase/org-context';
 
 export default function WorkspaceHomePage() {
   const { signOut } = useAuth();
+  const { currentOrg } = useOrg();
+  const orgId = currentOrg?.organization_id;
+
   const { data: runs } = useQuery({
-    queryKey: ['recent-runs'],
-    queryFn: fetchRecentRuns,
+    queryKey: ['recent-runs', orgId],
+    queryFn: () => fetchRecentRuns(orgId ?? undefined),
+    enabled: !!orgId,
   });
 
   return (
