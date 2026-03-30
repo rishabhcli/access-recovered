@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, RotateCcw, Save, Loader2 } from 'lucide-react';
 import { saveRun } from '@/lib/services/runs';
 import { useAuth } from '@/lib/supabase/auth-context';
+import { useOrg } from '@/lib/supabase/org-context';
 import { toast } from 'sonner';
 
 export default function RehearsalBoardPage() {
