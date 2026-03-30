@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Layers, Shield, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { ThemeToggle } from '@/components/shell/ThemeToggle';
 
 export default function LandingPage() {
   return (
@@ -13,7 +14,8 @@ export default function LandingPage() {
           </div>
           <span className="font-display text-lg">Lifeline</span>
         </div>
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
           <Link to="/replay/bridge-reconnect" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Demo</Link>
           <Link to="/auth" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Sign In</Link>
           <Link to="/app"

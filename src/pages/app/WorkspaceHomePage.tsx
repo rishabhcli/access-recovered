@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { MapPin, ArrowRight, Clock, Zap, Settings, BarChart3, Activity } from 'lucide-react';
+import { ThemeToggle } from '@/components/shell/ThemeToggle';
 import { useQuery } from '@tanstack/react-query';
 import { fetchRecentRuns } from '@/lib/services/runs';
 import { useAuth } from '@/lib/supabase/auth-context';
@@ -41,6 +42,7 @@ export default function WorkspaceHomePage() {
             <Settings className="w-4 h-4" />
           </Link>
           <div className="w-px h-4 bg-border" />
+          <ThemeToggle />
           <button onClick={() => signOut()} className="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1">
             Sign Out
           </button>
