@@ -83,7 +83,7 @@ export async function createInvitation(orgId: string, email: string, role: 'admi
     });
 
   if (error) throw error;
-}
+  logAudit({ action: 'invitation.sent', entity_type: 'invitation', organization_id: orgId, payload: { email, role } });
 
 export async function deleteInvitation(invitationId: string) {
   const { error } = await supabase
