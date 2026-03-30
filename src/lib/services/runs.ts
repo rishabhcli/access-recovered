@@ -76,6 +76,15 @@ export async function saveRun(params: SaveRunParams) {
 
   await supabase.from('scenario_run_events').insert(events);
 
+  // Audit log
+  logAudit({
+    action: 'run.saved',
+    entity_type: 'scenario_run',
+    entity_id: run!.id,
+    organization_id: params.organizationId,
+    payload: { title, interventionSlug: params.interventionSlug },
+  });
+
   return run!.id;
 }
 
