@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase/client';
 import { AccessMetrics, RunResult } from '@/lib/simulation/types';
 import type { Json } from '@/integrations/supabase/types';
+import { logAudit } from '@/lib/services/audit';
 
 export interface SaveRunParams {
   districtSlug: string;
