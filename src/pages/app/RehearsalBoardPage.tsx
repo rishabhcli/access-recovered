@@ -38,6 +38,7 @@ export default function RehearsalBoardPage() {
         result,
         floodedEdgesSnapshot: floodedEdges,
         resolvedEdgesSnapshot: edges,
+        organizationId: currentOrg?.organization_id,
       });
       toast.success('Run saved');
       navigate(`/app/runs/${runId}`);
